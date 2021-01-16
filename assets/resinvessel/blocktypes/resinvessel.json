@@ -1,0 +1,97 @@
+{
+  "code": "resinvessel",
+  "class": "resinvessel",
+  "behaviors": [
+    { "name": "RightClickPickup" }
+  ],
+  "heldTpIdleAnimation": "holdbothhands",
+  "heldTpUseAnimation": "twohandplaceblock",
+  "variantgroups": [
+    {
+      "code": "side",
+      "loadFromProperties": "game:abstract/horizontalorientation"
+    }
+  ],
+  "shapeByType": {
+    "*-north": {
+      "base": "game:block/clay/crock/base",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "game:block/clay/crock/base",
+      "rotateY": 270
+    },
+    "*-west": {
+      "base": "game:block/clay/crock/base",
+      "rotateY": 90
+    },
+    "*-south": {
+      "base": "game:block/clay/crock/base",
+      "rotateY": 180
+    }
+  },
+  "blockmaterial": "Ceramic",
+  "creativeinventory": { "general": [ "*" ] },
+  "textures": {
+    "all": { "base": "game:block/clay/blueclay" }
+  },
+  "replaceable": 400,
+  "resistance": 1.5,
+  "maxStackSize": 1,
+  "lightAbsorption": 0,
+  "sounds": {
+    "place": "game:walk/stone",
+    "break": "game:walk/stone"
+  },
+  "collisionbox": {
+    "x1": 0.25,
+    "y1": 0,
+    "z1": 0.25,
+    "x2": 0.75,
+    "y2": 0.3125,
+    "z2": 0.75
+  },
+  "selectionbox": {
+    "x1": 0.25,
+    "y1": 0,
+    "z1": 0.25,
+    "x2": 0.75,
+    "y2": 0.3125,
+    "z2": 0.75
+  },
+  "groundTransform": {
+    "scale": 3
+  },
+  "fpHandTransform": {
+    "translation": {
+      "x": 0,
+      "y": 0,
+      "z": 0.5
+    },
+    "origin": {
+      "x": 0.5,
+      "y": 0,
+      "z": 0.5
+    },
+    "scale": 2
+  },
+  "tpHandTransform": {
+    "translation": {
+      "x": -0.56,
+      "y": -0.03,
+      "z": -0.52
+    },
+    "rotation": {
+      "x": -139,
+      "y": -21,
+      "z": -118
+    },
+    "origin": {
+      "x": 0.5,
+      "y": 0.01,
+      "z": 0.5
+    },
+    "scale": 0.81
+  }
+
+}
