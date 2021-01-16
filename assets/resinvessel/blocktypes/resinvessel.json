@@ -2,7 +2,7 @@
   "code": "resinvessel",
   "class": "resinvessel",
   "behaviors": [
-    { "name": "RightClickPickup" }
+    { "name": "resinvesselb" }
   ],
   "heldTpIdleAnimation": "holdbothhands",
   "heldTpUseAnimation": "twohandplaceblock",

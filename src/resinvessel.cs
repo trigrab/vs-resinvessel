@@ -16,7 +16,8 @@ namespace resinvessel.src
         {
             base.Start(api);
             api.RegisterBlockClass("resinvessel", typeof(ResinVesselBlock));
-            api.RegisterBlockBehaviorClass("resinvessel", typeof(ResinVesselBehavior));
+            api.RegisterBlockBehaviorClass("resinvesselb", typeof(ResinVesselBehavior));
+            Console.WriteLine("Start mod system");
         }
     }
 
@@ -34,18 +35,42 @@ namespace resinvessel.src
 
         public override bool CanAttachBlockAt(IBlockAccessor world, Block block, BlockPos pos, BlockFacing blockFace, ref EnumHandling handling, Cuboidi attachmentArea)
         {
-
-            return true;
+            Console.WriteLine("Can attach?");
+            if (BlockFacing.VERTICALS.Contains(blockFace))
+            {
+                handling = EnumHandling.PreventDefault;
+                return true;
+            }
+            handling = EnumHandling.PassThrough;
+            return false;
         }
+
+        public override bool TryPlaceBlock(IWorldAccessor world, IPlayer byPlayer, ItemStack itemstack, BlockSelection blockSel, ref EnumHandling handling, ref string failureCode)
+        {
+            handling = EnumHandling.PreventDefault;
+
+            // Prefer selected block face
+            if (blockSel.Face.IsHorizontal)
+            {
+                Block orientedBlock = world.BlockAccessor.GetBlock(block.CodeWithParts(blockSel.Face.Code));
+                orientedBlock.DoPlaceBlock(world, byPlayer, blockSel, itemstack);
+                return true;
+            }
+
+            return false;
+        }
+
 
         public override bool OnBlockInteractStart(
             IWorldAccessor world, IPlayer byPlayer,
             BlockSelection blockSel, ref EnumHandling handling)
         {
-            (world as IServerWorldAccessor).CreateExplosion(
-                blockSel.Position, EnumBlastType.RockBlast, 5.0, 8.0);
-            handling = EnumHandling.PreventDefault;
+            Console.WriteLine("interacted");
             return true;
+        }
+        public override void OnBlockPlaced(IWorldAccessor world, BlockPos blockPos, ref EnumHandling handled)
+        {
+            Console.WriteLine("placed");
         }
     }
 }
