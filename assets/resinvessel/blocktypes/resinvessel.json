@@ -1,6 +1,7 @@
 {
   "code": "resinvessel",
   "classByType": { "resinvessel-burned-*": "resinvessel" },
+  "entityClass": "resinvessel",
   "behaviorsByType": {
     "resinvessel-burned-*": [
       { "name": "resinvesselb" }
