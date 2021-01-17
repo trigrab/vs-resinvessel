@@ -30,8 +30,12 @@ namespace resinvessel.src
     {
         // public static string NAME { get; } = "ResinVessel";
 
+
         public ResinVesselBehavior(Block block)
-            : base(block) { }
+            : base(block) {
+
+
+        }
 
         public override bool CanAttachBlockAt(IBlockAccessor world, Block block, BlockPos pos, BlockFacing blockFace, ref EnumHandling handling, Cuboidi attachmentArea)
         {
@@ -54,9 +58,28 @@ namespace resinvessel.src
                 world.BlockAccessor.GetBlock(placePos.Add(blockSel.Face.Opposite));
             Console.WriteLine("Place on" + placeOn);
 
+
+            // world.Logger.Chat("Log domain:" + placeOn.Code.Domain);
+            // world.Logger.Chat("Log domain:" + placeOn.Code.BeginsWith("game", "log-resin"));
+
             // Prefer selected block face
-            if (blockSel.Face.IsHorizontal && placeOn.Code.Path == "log-resin-pine-ud")
+            if (blockSel.Face.IsHorizontal && placeOn.Code.BeginsWith("game", "log-resin"))
             {
+                foreach (BlockFacing face in BlockFacing.HORIZONTALS)
+                {
+                    BlockPos testPos = placePos.AddCopy(face);
+                    if (IsResinVesel(world.BlockAccessor.GetBlock(testPos)))
+                    {
+                        /*
+                        List<BlockPos> tmpList = new List<BlockPos>();
+                        tmpList.Add(testPos);
+                        world.HighlightBlocks(byPlayer, 2, tmpList);
+                        */
+                        return false;
+                    }
+                }
+ 
+
                 Block orientedBlock = world.BlockAccessor.GetBlock(block.CodeWithParts(blockSel.Face.Code));
                 orientedBlock.DoPlaceBlock(world, byPlayer, blockSel, itemstack);
                 //block.DoPlaceBlock(world, byPlayer, blockSel, itemstack);
@@ -64,6 +87,11 @@ namespace resinvessel.src
             }
 
             return false;
+        }
+
+        private bool IsResinVesel(Block block)
+        {
+            return block.Code.BeginsWith("resinvessel", "resinvessel");
         }
 
 

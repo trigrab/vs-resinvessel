@@ -53,25 +53,25 @@
       "rotateY": 180
     },
     "*-filled-north": {
-      "base": "block/resinvessel/base",
-      "rotateY": 0
+      "base": "block/resinvessel/filled",
+      "rotateY": 90
     },
     "*-filled-east": {
-      "base": "block/resinvessel/base",
-      "rotateY": 270
+      "base": "block/resinvessel/filled",
+      "rotateY": 0
     },
     "*-filled-south": {
-      "base": "block/resinvessel/base",
-      "rotateY": 180
+      "base": "block/resinvessel/filled",
+      "rotateY": 270
     },
     "*-filled-west": {
-      "base": "block/resinvessel/base",
-      "rotateY": 90
+      "base": "block/resinvessel/filled",
+      "rotateY": 180
     }
 
   },
   "blockmaterial": "Ceramic",
-  "creativeinventory": { "general": [ "resinvessel-raw-empty-east", "resinvessel-burned-empty-east" ] },
+  "creativeinventory": { "general": [ "resinvessel-raw-empty-east", "resinvessel-burned-empty-east", "resinvessel-burned-filled-east" ] },
   "texturesByType": {
     "*-raw-*": {
       "ceramic": { "base": "game:block/clay/blueclay" },
