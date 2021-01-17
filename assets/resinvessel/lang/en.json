@@ -1,4 +1,4 @@
 {
-	"block-resinvessel": "Resin vessel"
-	
+  "block-resinvessel-empty-*": "Resin vessel",
+  "block-resinvessel-filled-*": "Resin filled"
 }
