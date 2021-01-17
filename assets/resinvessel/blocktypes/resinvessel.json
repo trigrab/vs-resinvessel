@@ -35,6 +35,12 @@
   "textures": {
     "all": { "base": "game:block/clay/blueclay" }
   },
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
   "replaceable": 400,
   "resistance": 1.5,
   "maxStackSize": 1,

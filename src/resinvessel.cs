@@ -23,7 +23,7 @@ namespace resinvessel.src
 
     public class ResinVesselBlock: Block
     {
-
+      
     }
 
     public class ResinVesselBehavior : BlockBehavior
@@ -49,8 +49,13 @@ namespace resinvessel.src
         {
             handling = EnumHandling.PreventDefault;
 
+            BlockPos placePos = blockSel.Position.Copy();
+            Block placeOn =
+                world.BlockAccessor.GetBlock(placePos.Add(blockSel.Face.Opposite));
+            Console.WriteLine("Place on" + placeOn);
+
             // Prefer selected block face
-            if (blockSel.Face.IsHorizontal)
+            if (blockSel.Face.IsHorizontal && placeOn.Code.Path == "log-resin-pine-ud")
             {
                 Block orientedBlock = world.BlockAccessor.GetBlock(block.CodeWithParts(blockSel.Face.Code));
                 orientedBlock.DoPlaceBlock(world, byPlayer, blockSel, itemstack);
