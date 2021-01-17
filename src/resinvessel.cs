@@ -39,7 +39,6 @@ namespace resinvessel.src
         }
         public void OnTick(float par)
         {
-            Api.World.Logger.Chat("Tick");
             foreach (int i in new int[] { -1, 1 })
             {
                 int[] vectorX = { i, 0, 0 };
@@ -51,10 +50,8 @@ namespace resinvessel.src
                     if (leakingPineLogBlock != null)
                     {
                         BlockBehaviorHarvestable harvestablePineLog = GetBlockBehaviorHarvestable(leakingPineLogBlock);
-                        Api.World.Logger.Chat("Resin!!");
                         HarvestResin(leakingPineLogBlock, harvestablePineLog);
                         ReplaceWithHarvested(blockPos);
-
                     }
                 }
             }
@@ -66,7 +63,7 @@ namespace resinvessel.src
             {
                 if (blockBehavior is BlockBehaviorHarvestable)
                 {
-                    return (BlockBehaviorHarvestable)blockBehavior;
+                    return (BlockBehaviorHarvestable) blockBehavior;
                 }
             }
             return null;
@@ -86,10 +83,9 @@ namespace resinvessel.src
             float dropRate = 1;  // normally multiplied with player harvestrate
 
             ItemStack resinLogStack = behavior.harvestedStack.GetNextItemStack(dropRate);
-            Api.Logger.Chat("" + behavior.harvestedStack.Code);
             if (resinVesselstack != null)
             {
-                if (resinVesselstack.Item.Code.Path == "resin")
+                if (resinVesselstack.Item.Code.Path == behavior.harvestedStack.Code.Path)
                 {
                     resinVesselstack.StackSize += resinLogStack.StackSize;
                 }
@@ -97,6 +93,14 @@ namespace resinvessel.src
             else
             {
                 Inventory[0].Itemstack = resinLogStack;
+            }
+            if (!Inventory.Empty)
+            {
+                Api.World.Logger.Chat("" + Inventory.Empty);
+                String codePath = Block.Code.Path.Replace("empty", "filled");
+                AssetLocation filledBlockAsset = AssetLocation.Create(codePath, Block.Code.Domain);
+                Block filledBlock = Api.World.GetBlock(filledBlockAsset);
+                Api.World.BlockAccessor.ExchangeBlock(filledBlock.BlockId, Pos);
             }
         }
         private Block ConvertBlockToLeakingPineBlockBlock(Block block)
