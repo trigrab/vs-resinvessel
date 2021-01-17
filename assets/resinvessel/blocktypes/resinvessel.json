@@ -1,14 +1,20 @@
 {
   "code": "resinvessel",
-  "class": "resinvessel",
-  "behaviors": [
-    { "name": "resinvesselb" }
-  ],
+  "classByType": { "resinvessel-burned-*": "resinvessel" },
+  "behaviorsByType": {
+    "resinvessel-burned-*": [
+      { "name": "resinvesselb" }
+    ]
+  },
   "heldTpIdleAnimation": "holdbothhands",
   "heldTpUseAnimation": "twohandplaceblock",
   "variantgroups": [
     {
       "code": "type",
+      "states": [ "raw", "burned" ]
+    },
+    {
+      "code": "state",
       "states": [ "empty", "filled" ]
     },
     {
@@ -16,6 +22,19 @@
       "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
+  "combustiblePropsByType": {
+    "resinvessel-raw-*": {
+      "meltingPoint": 600,
+      "meltingDuration": 45,
+      "smeltedRatio": 1,
+      "smeltingType": "bake",
+      "smeltedStack": {
+        "type": "block",
+        "code": "resinvessel-burned-empty-{side}"
+      },
+      "requiresContainer": false
+    }
+  },
   "shapebytype": {
     "*-empty-north": {
       "base": "block/resinvessel/base",
@@ -52,9 +71,11 @@
 
   },
   "blockmaterial": "Ceramic",
-  "creativeinventory": { "general": [ "resinvessel-empty-east" ] },
-  "textures": {
-    "all": { "base": "game:block/clay/blueclay" }
+  "creativeinventory": { "general": [ "resinvessel-raw-empty-east", "resinvessel-burned-empty-east" ] },
+  "texturesByType": {
+    "*-raw-*": {
+      "ceramic": { "base": "game:block/clay/blueclay" },
+    },
   },
   "sidesolid": {
     "all": false

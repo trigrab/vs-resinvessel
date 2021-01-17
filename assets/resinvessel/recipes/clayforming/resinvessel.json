@@ -38,6 +38,6 @@
 	name: "Resinvessel",
   output: {
     "type": "block",
-    "code": "resinvessel-empty-east"
+    "code": "resinvessel-raw-empty-east"
   }
 }
