@@ -59,6 +59,7 @@ namespace resinvessel.src
             {
                 Block orientedBlock = world.BlockAccessor.GetBlock(block.CodeWithParts(blockSel.Face.Code));
                 orientedBlock.DoPlaceBlock(world, byPlayer, blockSel, itemstack);
+                //block.DoPlaceBlock(world, byPlayer, blockSel, itemstack);
                 return true;
             }
 

@@ -8,30 +8,51 @@
   "heldTpUseAnimation": "twohandplaceblock",
   "variantgroups": [
     {
+      "code": "type",
+      "states": [ "empty", "filled" ]
+    },
+    {
       "code": "side",
-      "loadFromProperties": "game:abstract/horizontalorientation"
+      "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
-  "shapeByType": {
-    "*-north": {
-      "base": "game:block/clay/crock/base",
-      "rotateY": 0
-    },
-    "*-east": {
-      "base": "game:block/clay/crock/base",
-      "rotateY": 270
-    },
-    "*-west": {
-      "base": "game:block/clay/crock/base",
+  "shapebytype": {
+    "*-empty-north": {
+      "base": "block/resinvessel/base",
       "rotateY": 90
     },
-    "*-south": {
-      "base": "game:block/clay/crock/base",
+    "*-empty-east": {
+      "base": "block/resinvessel/base",
+      "rotateY": 0
+    },
+    "*-empty-south": {
+      "base": "block/resinvessel/base",
+      "rotateY": 270
+    },
+    "*-empty-west": {
+      "base": "block/resinvessel/base",
       "rotateY": 180
+    },
+    "*-filled-north": {
+      "base": "block/resinvessel/base",
+      "rotateY": 0
+    },
+    "*-filled-east": {
+      "base": "block/resinvessel/base",
+      "rotateY": 270
+    },
+    "*-filled-south": {
+      "base": "block/resinvessel/base",
+      "rotateY": 180
+    },
+    "*-filled-west": {
+      "base": "block/resinvessel/base",
+      "rotateY": 90
     }
+
   },
   "blockmaterial": "Ceramic",
-  "creativeinventory": { "general": [ "*" ] },
+  "creativeinventory": { "general": [ "resinvessel-empty-east" ] },
   "textures": {
     "all": { "base": "game:block/clay/blueclay" }
   },
@@ -49,21 +70,73 @@
     "place": "game:walk/stone",
     "break": "game:walk/stone"
   },
-  "collisionbox": {
-    "x1": 0.25,
-    "y1": 0,
-    "z1": 0.25,
-    "x2": 0.75,
-    "y2": 0.3125,
-    "z2": 0.75
+  "collisionboxbytype": {
+    "*-north": {
+      "x1": 0.25,
+      "y1": 0,
+      "z1": 0.5,
+      "x2": 0.75,
+      "y2": 0.3125,
+      "z2": 1
+    },
+    "*-south": {
+      "x1": 0.25,
+      "y1": 0,
+      "z1": 0.0,
+      "x2": 0.75,
+      "y2": 0.3125,
+      "z2": 0.5
+    },
+    "*-east": {
+      "x1": 0.0,
+      "y1": 0,
+      "z1": 0.25,
+      "x2": 0.5,
+      "y2": 0.3125,
+      "z2": 0.75
+    },
+    "*-west": {
+      "x1": 0.5,
+      "y1": 0,
+      "z1": 0.25,
+      "x2": 1,
+      "y2": 0.3125,
+      "z2": 0.75
+    }
   },
-  "selectionbox": {
-    "x1": 0.25,
-    "y1": 0,
-    "z1": 0.25,
-    "x2": 0.75,
-    "y2": 0.3125,
-    "z2": 0.75
+  "selectionboxbytype": {
+    "*-north": {
+      "x1": 0.25,
+      "y1": 0,
+      "z1": 0.5,
+      "x2": 0.75,
+      "y2": 0.3125,
+      "z2": 1
+    },
+    "*-south": {
+      "x1": 0.25,
+      "y1": 0,
+      "z1": 0.0,
+      "x2": 0.75,
+      "y2": 0.3125,
+      "z2": 0.5
+    },
+    "*-east": {
+      "x1": 0.0,
+      "y1": 0,
+      "z1": 0.25,
+      "x2": 0.5,
+      "y2": 0.3125,
+      "z2": 0.75
+    },
+    "*-west": {
+      "x1": 0.5,
+      "y1": 0,
+      "z1": 0.25,
+      "x2": 1,
+      "y2": 0.3125,
+      "z2": 0.75
+    }
   },
   "groundTransform": {
     "scale": 3
