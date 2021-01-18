@@ -9,6 +9,8 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.GameContent;
 using Vintagestory.API.MathTools;
+using Newtonsoft.Json.Linq;
+using Vintagestory.API.Server;
 
 namespace resinvessel.src
 {
@@ -25,12 +27,20 @@ namespace resinvessel.src
 
     public class BlockResinVessel : Block
     {
-
+        public override void OnLoaded(ICoreAPI api)
+        {
+            base.OnLoaded(api);
+        }
     }
 
     public class BlockEntityResinVessel : BlockEntityGenericTypedContainer
     {
         public BlockPos leakingLogBlockPos;
+        public JProperty leakingLogTransientProps;
+        public int inGameHours { get { return (int) leakingLogTransientProps.Value["inGameHours"]; } }
+        public string harvestBlockCode { get { return (string) leakingLogTransientProps.Value["convertFrom"]; } }
+        public string resinBlockCode { get { return (string)leakingLogTransientProps.Value["convertTo"]; } }
+
 
         public override void Initialize(ICoreAPI api)
         {
@@ -80,9 +90,11 @@ namespace resinvessel.src
                 foreach (int[] j in new int[][] { vectorX, vectorZ })
                 {
                     BlockPos blockPos = Pos.AddCopy(j[0], j[1], j[2]);
-                    if (CheckLeakingLogBlock(Api.World.BlockAccessor.GetBlock(blockPos), false))
+                    Block leakingBlock = Api.World.BlockAccessor.GetBlock(blockPos);
+                    if (CheckLeakingLogBlock(leakingBlock, false))
                     {
                         leakingLogBlockPos = blockPos;
+                        UpdateTransientProps(blockPos);
                     }
                 }
             }
@@ -120,8 +132,7 @@ namespace resinvessel.src
         private void ReplaceWithHarvested(BlockPos blockPos)
         {
             Block leakingBlock = Api.World.BlockAccessor.GetBlock(blockPos);
-            string code = leakingBlock.Code.Path.Replace("resin-", "resinharvested-");
-            AssetLocation harvestedLogBlockCode = AssetLocation.Create(code, leakingBlock.Code.Domain);
+            AssetLocation harvestedLogBlockCode = AssetLocation.Create(harvestBlockCode, leakingBlock.Code.Domain);
             Block harvestedLogBlock = Api.World.GetBlock(harvestedLogBlockCode);
             Api.World.BlockAccessor.SetBlock(harvestedLogBlock.BlockId, blockPos);
         }
@@ -155,6 +166,17 @@ namespace resinvessel.src
             Api.World.BlockAccessor.ExchangeBlock(filledBlock.BlockId, Pos);
         }
 
+        private void UpdateTransientProps(BlockPos leakingBlockPos)
+        {
+            Block leakingBlock = Api.World.BlockAccessor.GetBlock(leakingBlockPos);
+            foreach (JProperty obj in leakingBlock.Attributes.Token)
+            {
+                if (obj.Name == "transientProps")
+                {
+                    leakingLogTransientProps = obj;
+                }
+            }
+        }
     }
 
     public class BlockBehaviorResinVessel : BlockBehavior
