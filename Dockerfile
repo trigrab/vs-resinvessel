@@ -21,5 +21,5 @@ RUN cp /game/Lib/* /code/lib
 
 RUN msbuild resinvessel.csproj -property:Configuration=Release
 
-RUN ls -la 
+RUN ls -la /bin
 
