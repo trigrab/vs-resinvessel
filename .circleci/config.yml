@@ -1,6 +1,5 @@
 version: 2.1
 publish-github-release:
-build:
     docker:
       - image: circleci/golang:1.15
     steps:
