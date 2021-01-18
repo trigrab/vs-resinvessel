@@ -17,19 +17,19 @@ namespace resinvessel.src
         public override void Start(ICoreAPI api)
         {
             base.Start(api);
-            api.RegisterBlockClass("resinvessel", typeof(ResinVesselBlock));
-            api.RegisterBlockBehaviorClass("resinvesselb", typeof(ResinVesselBehavior));
-            api.RegisterBlockEntityClass("resinvessel", typeof(ResinVesselBlockEntity));
+            api.RegisterBlockClass("resinvessel", typeof(BlockResinVessel));
+            api.RegisterBlockBehaviorClass("resinvesselb", typeof(BlockBehaviorResinVessel));
+            api.RegisterBlockEntityClass("resinvessel", typeof(BlockEntityResinVessel));
             Console.WriteLine("Start mod system");
         }
     }
 
-    public class ResinVesselBlock: Block
+    public class BlockResinVessel : Block
     {
 
     }
 
-    public class ResinVesselBlockEntity : BlockEntityGenericTypedContainer
+    public class BlockEntityResinVessel : BlockEntityGenericTypedContainer
     {
         public override void Initialize(ICoreAPI api)
         {
@@ -42,7 +42,7 @@ namespace resinvessel.src
         {
             base.GetBlockInfo(forPlayer, dsc);
 
-            int stacksize = (Inventory.Empty) ? 0 : Inventory.First().Itemstack.StackSize;
+            int stacksize = (Inventory.Empty) ? 0 : Inventory[0].Itemstack.StackSize;
             {
 
             }
@@ -93,7 +93,7 @@ namespace resinvessel.src
 
         private void HarvestResin(Block leakingPineLog, BlockBehaviorHarvestable behavior)
         {
-            ItemStack resinVesselstack = Inventory.First().Itemstack;
+            ItemStack resinVesselstack = Inventory[0].Itemstack;
 
             float dropRate = 1;  // normally multiplied with player harvestrate
 
@@ -136,12 +136,12 @@ namespace resinvessel.src
         }
     }
 
-    public class ResinVesselBehavior : BlockBehavior
+    public class BlockBehaviorResinVessel : BlockBehavior
     {
         // public static string NAME { get; } = "ResinVessel";
 
 
-        public ResinVesselBehavior(Block block)
+        public BlockBehaviorResinVessel(Block block)
             : base(block) {
 
 
@@ -149,7 +149,6 @@ namespace resinvessel.src
 
         public override bool CanAttachBlockAt(IBlockAccessor world, Block block, BlockPos pos, BlockFacing blockFace, ref EnumHandling handling, Cuboidi attachmentArea)
         {
-            Console.WriteLine("Can attach?");
             if (BlockFacing.VERTICALS.Contains(blockFace))
             {
                 handling = EnumHandling.PreventDefault;
@@ -206,13 +205,13 @@ namespace resinvessel.src
 
             BlockEntity entity = world.BlockAccessor.GetBlockEntity(blockSel.Position);
 
-            if (entity is ResinVesselBlockEntity)
+            if (entity is BlockEntityResinVessel)
             {
-                ResinVesselBlockEntity vessel = (ResinVesselBlockEntity)entity;
+                BlockEntityResinVessel vessel = (BlockEntityResinVessel)entity;
 
                 if (!vessel.Inventory.Empty)
                 {
-                    ItemStack stack = vessel.Inventory.First().TakeOutWhole();
+                    ItemStack stack = vessel.Inventory[0].TakeOutWhole();
                     if (!byPlayer.InventoryManager.TryGiveItemstack(stack))
                     {
                         world.SpawnItemEntity(stack, blockSel.Position.ToVec3d().Add(0.5, 0.5, 0.5));
@@ -235,16 +234,16 @@ namespace resinvessel.src
 
             BlockEntity entity = world.BlockAccessor.GetBlockEntity(pos);
 
-            if (entity is BlockEntityOpenableContainer)
+            if (entity is BlockEntityResinVessel)
             {
-                BlockEntityOpenableContainer container = (BlockEntityOpenableContainer)entity;
+                BlockEntityResinVessel vessel = (BlockEntityResinVessel)entity;
 
                 IPlayer[] players = world.AllOnlinePlayers;
                 for (int i = 0; i < players.Length; i++)
                 {
-                    if (players[i].InventoryManager.HasInventory(container.Inventory))
+                    if (players[i].InventoryManager.HasInventory(vessel.Inventory))
                     {
-                        players[i].InventoryManager.CloseInventory(container.Inventory);
+                        players[i].InventoryManager.CloseInventory(vessel.Inventory);
                     }
                 }
             }
@@ -253,11 +252,6 @@ namespace resinvessel.src
         private bool IsResinVesel(Block block)
         {
             return block.Code.BeginsWith("resinvessel", "resinvessel");
-        }
-
-        public override void OnBlockPlaced(IWorldAccessor world, BlockPos blockPos, ref EnumHandling handled)
-        {
-            Console.WriteLine("placed");
         }
     }
 }
