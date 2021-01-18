@@ -1,13 +1,9 @@
 version: 2.1
 jobs:
   publish-github-release:
-    docker:
-      - image: circleci/golang:1.15
-    steps:
+   machine: true
+   steps:
       - checkout
-      - setup_remote_docker:
-          version: 19.03.13
-          docker_layer_caching: true
 
       # build Docker image
       - run: docker build -t trigrab/vs-resinvessel:$CIRCLE_BRANCH .
