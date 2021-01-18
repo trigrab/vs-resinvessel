@@ -14,10 +14,11 @@ RUN go get -u github.com/tcnksm/ghr
 COPY . /code
 WORKDIR /code 
 
-RUN mkdir -p /game/lib
+RUN mkdir -p /code/lib
 RUN cp /game/*.dll /code/lib
 RUN cp /game/Mods/* /code/lib
 RUN cp /game/Lib/* /code/lib
 
 RUN msbuild resinvessel.csproj -property:Configuration=Release
 
+RUN ls -la /code/bin/Release/resinvessel

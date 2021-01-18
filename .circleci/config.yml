@@ -1,0 +1,19 @@
+version: 2.1
+
+workflows:
+  my-workflow:
+    jobs:
+      - build:
+          context:
+            - vs-resinvessel
+
+jobs:
+  build:
+   machine: true
+   steps:
+      - checkout
+      # - setup_remote_docker:
+      #    docker_layer_caching: true
+      # build Docker image
+      - run: docker build -t trigrab/vs-resinvessel:$CIRCLE_BRANCH .
+      - run: docker run trigrab/vs-resinvessel:$CIRCLE_BRANCH /root/go/bin/ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete v0.${CIRCLE_BUILD_NUM} /code/bin/Release/resinvessel/resinvessel.dll
