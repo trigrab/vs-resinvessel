@@ -15,4 +15,4 @@ jobs:
 
       # build Docker image
       - run: docker build -t trigrab/vs-resinvessel:$CIRCLE_BRANCH .
-      - run: docker run trigrab/vs-resinvessel:$CIRCLE_BRANCH /root/go/bin/ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./resinvessel.dll
+      - run: docker run trigrab/vs-resinvessel:$CIRCLE_BRANCH /root/go/bin/ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./bin/Release/resinvessel/resinvessel.dll
