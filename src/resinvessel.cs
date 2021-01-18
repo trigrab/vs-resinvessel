@@ -37,6 +37,21 @@ namespace resinvessel.src
             RegisterGameTickListener(OnTick, 1000);
             retrieveOnly = true;
         }
+
+        public override void GetBlockInfo(IPlayer forPlayer, StringBuilder dsc)
+        {
+            base.GetBlockInfo(forPlayer, dsc);
+
+            int stacksize = (Inventory.Empty) ? 0 : Inventory.First().Itemstack.StackSize;
+            {
+
+            }
+
+            dsc.Clear();
+
+            dsc.AppendLine(Lang.Get("Resin stored: {0}", stacksize));
+        }
+
         public void OnTick(float par)
         {
             foreach (int i in new int[] { -1, 1 })
@@ -94,15 +109,17 @@ namespace resinvessel.src
             {
                 Inventory[0].Itemstack = resinLogStack;
             }
-            if (!Inventory.Empty)
-            {
-                Api.World.Logger.Chat("" + Inventory.Empty);
-                String codePath = Block.Code.Path.Replace("empty", "filled");
-                AssetLocation filledBlockAsset = AssetLocation.Create(codePath, Block.Code.Domain);
-                Block filledBlock = Api.World.GetBlock(filledBlockAsset);
-                Api.World.BlockAccessor.ExchangeBlock(filledBlock.BlockId, Pos);
-            }
+            UpdateAsset();
         }
+
+        public void UpdateAsset()
+        {
+            String codePath = (!Inventory.Empty) ? Block.Code.Path.Replace("empty", "filled") : Block.Code.Path.Replace("filled", "empty");
+            AssetLocation filledBlockAsset = AssetLocation.Create(codePath, Block.Code.Domain);
+            Block filledBlock = Api.World.GetBlock(filledBlockAsset);
+            Api.World.BlockAccessor.ExchangeBlock(filledBlock.BlockId, Pos);
+        }
+
         private Block ConvertBlockToLeakingPineBlockBlock(Block block)
         {
             if (block != null)
@@ -119,7 +136,7 @@ namespace resinvessel.src
         }
     }
 
-    public class ResinVesselBehavior : BlockBehaviorContainer
+    public class ResinVesselBehavior : BlockBehavior
     {
         // public static string NAME { get; } = "ResinVessel";
 
@@ -183,6 +200,55 @@ namespace resinvessel.src
             return false;
         }
 
+        public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, ref EnumHandling handling)
+        {
+            handling = EnumHandling.PreventSubsequent;
+
+            BlockEntity entity = world.BlockAccessor.GetBlockEntity(blockSel.Position);
+
+            if (entity is ResinVesselBlockEntity)
+            {
+                ResinVesselBlockEntity vessel = (ResinVesselBlockEntity)entity;
+
+                if (!vessel.Inventory.Empty)
+                {
+                    ItemStack stack = vessel.Inventory.First().TakeOutWhole();
+                    if (!byPlayer.InventoryManager.TryGiveItemstack(stack))
+                    {
+                        world.SpawnItemEntity(stack, blockSel.Position.ToVec3d().Add(0.5, 0.5, 0.5));
+                    }
+                    vessel.UpdateAsset();
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                
+            }
+
+            return false;
+        }
+
+        public override void OnBlockRemoved(IWorldAccessor world, BlockPos pos, ref EnumHandling handling)
+        {
+            handling = EnumHandling.PassThrough;
+
+            BlockEntity entity = world.BlockAccessor.GetBlockEntity(pos);
+
+            if (entity is BlockEntityOpenableContainer)
+            {
+                BlockEntityOpenableContainer container = (BlockEntityOpenableContainer)entity;
+
+                IPlayer[] players = world.AllOnlinePlayers;
+                for (int i = 0; i < players.Length; i++)
+                {
+                    if (players[i].InventoryManager.HasInventory(container.Inventory))
+                    {
+                        players[i].InventoryManager.CloseInventory(container.Inventory);
+                    }
+                }
+            }
+        }
 
         private bool IsResinVesel(Block block)
         {
