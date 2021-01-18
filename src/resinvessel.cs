@@ -20,7 +20,6 @@ namespace resinvessel.src
             api.RegisterBlockClass("resinvessel", typeof(BlockResinVessel));
             api.RegisterBlockBehaviorClass("resinvesselb", typeof(BlockBehaviorResinVessel));
             api.RegisterBlockEntityClass("resinvessel", typeof(BlockEntityResinVessel));
-            Console.WriteLine("Start mod system");
         }
     }
 
@@ -166,9 +165,6 @@ namespace resinvessel.src
             Block placeOn =
                 world.BlockAccessor.GetBlock(placePos.Add(blockSel.Face.Opposite));
 
-
-            // world.Logger.Chat("Log domain:" + placeOn.Code.Domain);
-            // world.Logger.Chat("Log domain:" + placeOn.Code.BeginsWith("game", "log-resin"));
 
             // Prefer selected block face
             if (blockSel.Face.IsHorizontal && placeOn.Code.BeginsWith("game", "log-resin"))
