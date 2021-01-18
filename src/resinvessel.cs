@@ -30,6 +30,7 @@ namespace resinvessel.src
 
     public class BlockEntityResinVessel : BlockEntityGenericTypedContainer
     {
+        public BlockPos leakingPineLogPos;
         public override void Initialize(ICoreAPI api)
         {
             base.Initialize(api);
@@ -53,6 +54,24 @@ namespace resinvessel.src
 
         public void OnTick(float par)
         {
+            if (leakingPineLogPos != null)
+            {
+                Block leakingPineLogBlock = ConvertBlockToLeakingPineBlockBlock(Api.World.BlockAccessor.GetBlock(leakingPineLogPos));
+                if (leakingPineLogBlock != null)
+                {
+                    BlockBehaviorHarvestable harvestablePineLog = GetBlockBehaviorHarvestable(leakingPineLogBlock);
+                    HarvestResin(leakingPineLogBlock, harvestablePineLog);
+                    ReplaceWithHarvested(leakingPineLogPos);
+                }
+            }
+            else
+            {
+                SelectLeakingPineLog();
+            }
+        }
+
+        private void SelectLeakingPineLog()
+        {
             foreach (int i in new int[] { -1, 1 })
             {
                 int[] vectorX = { i, 0, 0 };
@@ -60,12 +79,9 @@ namespace resinvessel.src
                 foreach (int[] j in new int[][] { vectorX, vectorZ })
                 {
                     BlockPos blockPos = Pos.AddCopy(j[0], j[1], j[2]);
-                    Block leakingPineLogBlock = ConvertBlockToLeakingPineBlockBlock(Api.World.BlockAccessor.GetBlock(blockPos));
-                    if (leakingPineLogBlock != null)
+                    if (ConvertBlockToLeakingPineBlockBlock(Api.World.BlockAccessor.GetBlock(blockPos), false) != null)
                     {
-                        BlockBehaviorHarvestable harvestablePineLog = GetBlockBehaviorHarvestable(leakingPineLogBlock);
-                        HarvestResin(leakingPineLogBlock, harvestablePineLog);
-                        ReplaceWithHarvested(blockPos);
+                        leakingPineLogPos = blockPos;
                     }
                 }
             }
@@ -119,13 +135,15 @@ namespace resinvessel.src
             Api.World.BlockAccessor.ExchangeBlock(filledBlock.BlockId, Pos);
         }
 
-        private Block ConvertBlockToLeakingPineBlockBlock(Block block)
+        private Block ConvertBlockToLeakingPineBlockBlock(Block block, bool checkLeaking = true)
         {
             if (block != null)
             {
                 if (block.Code != null)
                 {
-                    if (block.Code.BeginsWith("game", "log-resin-"))
+                    string code = "log-resin";
+                    code += (checkLeaking) ? "-" : "";
+                    if (block.Code.BeginsWith("game", code))
                     {
                         return block;
                     }
