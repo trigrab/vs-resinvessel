@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  publish-github-release:
+  build:
    machine: true
    steps:
       - checkout
