@@ -14,6 +14,7 @@ RUN go get -u github.com/tcnksm/ghr
 COPY . /code
 WORKDIR /code 
 
+RUN mkdir -p /game/lib
 RUN cp /game/*.dll /code/lib
 RUN cp /game/Mods/* /code/lib
 RUN cp /game/Lib/* /code/lib
