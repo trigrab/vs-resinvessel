@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Debug\resinvessel\</OutputPath>
+    <OutputPath>bin\Debug\resinvessel\</OutputPath>
     <IntermediateOutputPath>..\..\obj\Debug\resinvessel\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Release\resinvessel\</OutputPath>
+    <OutputPath>bin\Release\resinvessel\</OutputPath>
     <IntermediateOutputPath>..\..\obj\Release\resinvessel\</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
